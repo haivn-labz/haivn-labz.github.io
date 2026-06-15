@@ -55,7 +55,6 @@
             </div>
             
             <div class="flex items-center gap-3">
-                <!-- Nút Đăng nhập / Đăng xuất Admin -->
                 <button id="authBtn" class="flex items-center gap-2 text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full transition-colors">
                     <i class="fa-solid fa-lock"></i> <span>Đăng nhập Admin</span>
                 </button>
@@ -141,7 +140,7 @@
                                             <input id="productImage" name="productImage" type="file" accept="image/*" class="sr-only">
                                         </label>
                                     </div>
-                                    <p class="text-xs text-gray-500">Tối đa 2MB</p>
+                                    <p class="text-xs text-gray-500">Hệ thống sẽ tự động nén ảnh nhẹ đi</p>
                                 </div>
                                 <div id="imagePreviewContainer" class="hidden absolute inset-0 bg-white rounded-lg overflow-hidden flex items-center justify-center group">
                                     <img id="imagePreview" src="" alt="Preview" class="h-full w-full object-cover">
@@ -168,7 +167,6 @@
 
             <!-- Cột phải: Lưới hiển thị sản phẩm -->
             <div id="listColumn" class="lg:col-span-12 space-y-6 transition-all duration-300">
-                <!-- Loading State -->
                 <div id="loadingState" class="flex justify-center items-center py-20">
                     <i class="fa-solid fa-circle-notch fa-spin text-4xl text-bakery-accent"></i>
                 </div>
@@ -217,8 +215,7 @@
         import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // =========================================================================
-        // 🔑 BƯỚC 1: DÁN CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY (Để lưu dữ liệu online)
-        // Nếu để trống, web sẽ tự động chạy ở chế độ Offline (chỉ lưu trên máy bạn)
+        // 🔑 DÁN CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY (nhớ dùng 'let' nhé!)
         // =========================================================================
         let firebaseConfig = {
   apiKey: "AIzaSyB2B25nLv2ejGVv2SlKRL5jzZQeUB1en1c",
@@ -230,6 +227,7 @@
   measurementId: "G-63WG4CD25G"
 };
 
+
         // --- CẤU HÌNH NỘI BỘ (KHÔNG CẦN SỬA) ---
         let appId = 'bakery-menu-app';
         try {
@@ -239,7 +237,6 @@
             if (typeof __app_id !== 'undefined') appId = __app_id;
         } catch (e) { console.warn("Sử dụng config mặc định"); }
 
-        // Kiểm tra xem đã có cấu hình Database chưa
         const isCloudMode = Object.keys(firebaseConfig).length > 0;
         
         let app, auth, db;
@@ -259,7 +256,7 @@
         let searchQuery = '';
         let currentImageBase64 = null;
         let isUploading = false;
-        let editingProductId = null; // Biến lưu ID sản phẩm đang sửa
+        let editingProductId = null; 
 
         // Mật khẩu Admin
         const ADMIN_PASSCODE = 'hienyeuhai99';
@@ -276,19 +273,13 @@
         const loadingState = document.getElementById('loadingState');
         const filterBtns = document.querySelectorAll('.filter-btn');
         const searchInput = document.getElementById('searchInput');
-        
-        // Form layout elements
         const formColumn = document.getElementById('formColumn');
         const listColumn = document.getElementById('listColumn');
-        
-        // Admin Auth elements
         const authBtn = document.getElementById('authBtn');
         const loginModal = document.getElementById('loginModal');
         const adminPassword = document.getElementById('adminPassword');
         const closeLoginModalBtn = document.getElementById('closeLoginModalBtn');
         const confirmLoginBtn = document.getElementById('confirmLoginBtn');
-
-        // Image elements
         const imageInput = document.getElementById('productImage');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
         const imagePreviewContainer = document.getElementById('imagePreviewContainer');
@@ -302,11 +293,9 @@
             const toast = document.createElement('div');
             const bgColor = type === 'success' ? 'bg-green-500' : (type === 'error' ? 'bg-red-500' : 'bg-blue-500');
             const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-circle-exclamation' : 'fa-info-circle');
-            
             toast.className = `${bgColor} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 toast-enter min-w-[250px]`;
             toast.innerHTML = `<i class="fa-solid ${icon} text-xl"></i><span class="font-medium text-sm">${message}</span>`;
             document.getElementById('toastContainer').appendChild(toast);
-
             setTimeout(() => {
                 toast.classList.remove('toast-enter');
                 toast.classList.add('toast-exit');
@@ -320,38 +309,33 @@
             if (isAdmin) {
                 authBtn.innerHTML = '<i class="fa-solid fa-unlock text-bakery-accent"></i> <span class="text-bakery-accent font-bold">Thoát Admin</span>';
                 authBtn.classList.replace('bg-gray-100', 'bg-amber-50');
-                
                 formColumn.classList.remove('hidden');
                 listColumn.className = 'lg:col-span-8 space-y-6 transition-all duration-300';
                 showToast('Đã mở khóa quyền chỉnh sửa!');
             } else {
                 authBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span>Đăng nhập Admin</span>';
                 authBtn.classList.replace('bg-amber-50', 'bg-gray-100');
-                
                 formColumn.classList.add('hidden');
                 listColumn.className = 'lg:col-span-12 space-y-6 transition-all duration-300';
-                resetForm(); // Xóa trạng thái đang sửa nếu có
+                resetForm(); 
             }
-            renderProducts(); // Render lại để hiện/ẩn nút xóa/sửa
+            renderProducts(); 
         };
 
         // --- RENDER SẢN PHẨM ---
         const renderProducts = () => {
             grid.innerHTML = '';
-            
-            // Lọc sản phẩm theo danh mục và tìm kiếm
             let filteredProducts = products;
             
             if (currentFilter !== 'all') {
                 filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
             }
-            
             if (searchQuery) {
                 const query = searchQuery.toLowerCase();
                 filteredProducts = filteredProducts.filter(p => 
                     (p.nameVi && p.nameVi.toLowerCase().includes(query)) || 
                     (p.nameZh && p.nameZh.toLowerCase().includes(query)) ||
-                    (p.name && p.name.toLowerCase().includes(query)) // Fallback cho dữ liệu cũ
+                    (p.name && p.name.toLowerCase().includes(query))
                 );
             }
 
@@ -377,7 +361,6 @@
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 group relative flex flex-col h-full';
                     
-                    // Nút Xóa và Sửa (Chỉ admin mới thấy)
                     const adminBtnsHtml = isAdmin ? `
                         <div class="absolute top-2 right-2 sm:top-3 sm:right-3 flex gap-1.5 sm:gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity z-10">
                             <button class="edit-product-btn bg-blue-500 text-white w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 hover:scale-110 text-xs sm:text-base" data-id="${product.id}" title="Sửa sản phẩm">
@@ -416,7 +399,6 @@
                     grid.appendChild(card);
                 });
 
-                // Gắn sự kiện cho các nút xóa và sửa
                 if (isAdmin) {
                     document.querySelectorAll('.delete-product-btn').forEach(btn => {
                         btn.addEventListener('click', async (e) => {
@@ -426,7 +408,6 @@
                             }
                         });
                     });
-                    
                     document.querySelectorAll('.edit-product-btn').forEach(btn => {
                         btn.addEventListener('click', (e) => {
                             const id = e.currentTarget.getAttribute('data-id');
@@ -438,31 +419,21 @@
         };
 
         // --- XỬ LÝ DATABASE DATA ---
-        
-        // Lấy dữ liệu Realtime
         const setupRealtimeUpdates = () => {
             if (!currentUser) return;
-            
             if (!isCloudMode) {
-                // CHẾ ĐỘ OFFLINE: Lấy dữ liệu từ bộ nhớ tạm của trình duyệt
                 const localData = localStorage.getItem('bakery_products_v3');
                 products = localData ? JSON.parse(localData) : [];
                 renderProducts();
                 return;
             }
-
-            // Path lưu trữ public
             const productsRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
-            
             onSnapshot(productsRef, (snapshot) => {
                 products = [];
                 snapshot.forEach((doc) => {
                     products.push({ id: doc.id, ...doc.data() });
                 });
-                
-                // Sắp xếp tạm thời mới nhất lên đầu (do không dùng orderBy)
                 products.sort((a, b) => b.createdAt - a.createdAt);
-                
                 renderProducts();
             }, (error) => {
                 console.error("Lỗi tải dữ liệu:", error);
@@ -471,15 +442,12 @@
             });
         };
 
-        // Khởi tạo Auth
         const initAuth = async () => {
             if (!isCloudMode) {
-                // CHẾ ĐỘ OFFLINE: Bỏ qua đăng nhập, cho phép chạy ngay lập tức
                 currentUser = { uid: 'local-user' };
                 setupRealtimeUpdates();
                 return;
             }
-
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -500,38 +468,32 @@
                 }
             });
         }
-
-        // Chạy Auth
         initAuth();
 
-        // Xóa Data
         const deleteProductFromDB = async (docId) => {
             if (!currentUser || !isAdmin) return;
             try {
-                // Hiển thị UI loading mờ thẻ đang xóa
                 const btn = document.querySelector(`button.delete-product-btn[data-id="${docId}"]`);
                 if(btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
                 if (!isCloudMode) {
-                    // CHẾ ĐỘ OFFLINE: Xóa khỏi bộ nhớ tạm
                     products = products.filter(p => p.id !== docId);
                     localStorage.setItem('bakery_products_v3', JSON.stringify(products));
                     renderProducts();
-                    showToast('Đã xóa khỏi menu (Chế độ Offline)!', 'info');
-                    if(editingProductId === docId) resetForm(); // Hủy sửa nếu đang sửa sản phẩm bị xóa
+                    showToast('Đã xóa khỏi menu!', 'info');
+                    if(editingProductId === docId) resetForm();
                     return;
                 }
 
                 await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', docId));
                 showToast('Đã xóa khỏi menu!', 'info');
-                if(editingProductId === docId) resetForm(); // Hủy sửa nếu đang sửa sản phẩm bị xóa
+                if(editingProductId === docId) resetForm(); 
             } catch (error) {
                 console.error("Lỗi xóa:", error);
                 showToast('Không thể xóa sản phẩm', 'error');
             }
         };
 
-        // Chức năng Reset Form và Xử lý Sửa
         const resetForm = () => {
             form.reset();
             removeImageBtn.click();
@@ -567,14 +529,11 @@
             submitText.innerText = 'Cập Nhật';
             cancelEditBtn.classList.remove('hidden');
             cancelEditBtn.classList.add('flex');
-
-            // Cuộn lên form
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         cancelEditBtn.addEventListener('click', resetForm);
 
-        // Thêm / Cập nhật Data
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser || !isAdmin || isUploading) return;
@@ -594,13 +553,12 @@
 
             try {
                 if (!isCloudMode) {
-                    // CHẾ ĐỘ OFFLINE
                     if (editingProductId) {
                         const index = products.findIndex(p => p.id === editingProductId);
                         if (index !== -1) {
                             products[index] = { ...products[index], nameVi, nameZh, category, price, image: finalImage };
                             localStorage.setItem('bakery_products_v3', JSON.stringify(products));
-                            showToast('Đã cập nhật sản phẩm (Offline)!');
+                            showToast('Đã cập nhật sản phẩm!');
                         }
                     } else {
                         const newProduct = {
@@ -610,9 +568,8 @@
                         };
                         products.unshift(newProduct);
                         localStorage.setItem('bakery_products_v3', JSON.stringify(products));
-                        showToast('Đã thêm sản phẩm (Chế độ Offline)!');
+                        showToast('Đã thêm sản phẩm!');
                     }
-                    
                     renderProducts();
                     resetForm();
                     isUploading = false;
@@ -620,28 +577,19 @@
                     return;
                 }
 
-                // CHẾ ĐỘ CLOUD
                 if (editingProductId) {
                     const productRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', editingProductId);
-                    await updateDoc(productRef, {
-                        nameVi, nameZh, category, price, image: finalImage
-                    });
+                    await updateDoc(productRef, { nameVi, nameZh, category, price, image: finalImage });
                     showToast('Đã cập nhật sản phẩm!');
                 } else {
                     const productsRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
-                    await addDoc(productsRef, {
-                        nameVi, nameZh, category, price, image: finalImage,
-                        createdAt: Date.now() 
-                    });
+                    await addDoc(productsRef, { nameVi, nameZh, category, price, image: finalImage, createdAt: Date.now() });
                     showToast('Đã thêm sản phẩm vào Menu!');
                 }
-                
                 resetForm(); 
             } catch (error) {
                 console.error("Lỗi lưu dữ liệu:", error);
-                showToast('Lỗi khi lưu sản phẩm', 'error');
-                
-                // Khôi phục UI nút bấm nếu có lỗi
+                showToast('Lỗi khi lưu sản phẩm. Bức ảnh có thể vẫn còn quá nặng', 'error');
                 submitIcon.className = editingProductId ? 'fa-solid fa-floppy-disk' : 'fa-solid fa-cloud-arrow-up';
                 submitText.innerText = editingProductId ? 'Cập Nhật' : 'Lưu Lên Cloud';
             } finally {
@@ -650,15 +598,8 @@
             }
         });
 
-        // --- XỬ LÝ SỰ KIỆN GIAO DIỆN ---
-
-        // Xử lý Tìm kiếm
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value.trim();
-            renderProducts();
-        });
-
-        // Xử lý Bộ lọc
+        // Xử lý Tìm kiếm và Bộ lọc
+        searchInput.addEventListener('input', (e) => { searchQuery = e.target.value.trim(); renderProducts(); });
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => {
@@ -674,19 +615,11 @@
 
         // Xử lý Modal Đăng nhập Admin
         authBtn.addEventListener('click', () => {
-            if (isAdmin) {
-                toggleAdminMode(false); // Đăng xuất
-            } else {
-                loginModal.classList.remove('hidden');
-                setTimeout(() => adminPassword.focus(), 100);
-            }
+            if (isAdmin) { toggleAdminMode(false); } 
+            else { loginModal.classList.remove('hidden'); setTimeout(() => adminPassword.focus(), 100); }
         });
-
-        closeLoginModalBtn.addEventListener('click', () => {
-            loginModal.classList.add('hidden');
-            adminPassword.value = '';
-        });
-
+        closeLoginModalBtn.addEventListener('click', () => { loginModal.classList.add('hidden'); adminPassword.value = ''; });
+        
         const handleLoginSubmit = () => {
             if (adminPassword.value === ADMIN_PASSCODE) {
                 loginModal.classList.add('hidden');
@@ -698,28 +631,51 @@
                 setTimeout(() => adminPassword.classList.remove('border-red-500', 'ring-1', 'ring-red-500'), 2000);
             }
         };
-
         confirmLoginBtn.addEventListener('click', handleLoginSubmit);
-        adminPassword.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLoginSubmit();
-        });
+        adminPassword.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLoginSubmit(); });
 
-        // --- XỬ LÝ HÌNH ẢNH ---
+        // --- MÃ NÉN ẢNH (GIẢI QUYẾT LỖI TẢI ẢNH NẶNG) ---
         const handleImageUpload = (file) => {
             if (!file) return;
             if (!file.type.startsWith('image/')) {
                 showToast('Vui lòng chọn file hình ảnh', 'error'); return;
             }
-            if (file.size > 2 * 1024 * 1024) { // Tối đa 2MB
-                showToast('Kích thước ảnh quá lớn (Tối đa 2MB)', 'error'); return;
-            }
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                currentImageBase64 = e.target.result;
-                imagePreview.src = currentImageBase64;
-                uploadPlaceholder.classList.add('hidden');
-                imagePreviewContainer.classList.remove('hidden');
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Giới hạn chiều dài/rộng tối đa là 800px
+                    const MAX_SIZE = 800;
+                    if (width > height && width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    } else if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Vẽ nền trắng để tránh bị lỗi đen nền khi nén ảnh PNG trong suốt
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Chuyển ảnh về định dạng JPEG và nén với chất lượng 70% (cực kỳ nhẹ, thường chỉ dưới 100KB)
+                    currentImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    imagePreview.src = currentImageBase64;
+                    uploadPlaceholder.classList.add('hidden');
+                    imagePreviewContainer.classList.remove('hidden');
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         };
