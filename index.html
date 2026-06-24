@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Tiệm Bánh & Cà Phê</title>
+    <title>Little Sweet Bakery & Coffee</title>
     <!-- Tải Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -41,7 +41,7 @@
     </style>
 </head>
 
-<body class="bg-bakery-light text-bakery-dark min-h-screen">
+<body class="bg-bakery-light text-bakery-dark min-h-screen relative">
 
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-10">
@@ -50,8 +50,10 @@
                 <div class="bg-bakery-accent text-white p-2 rounded-lg shadow-sm">
                     <i class="fa-solid fa-croissant text-xl"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-bakery-dark hidden sm:block">Bakery & Coffee</h1>
-                <h1 class="text-xl font-bold text-bakery-dark sm:hidden">Menu</h1>
+                <div class="flex flex-col justify-center">
+                    <h1 class="text-xl sm:text-2xl font-bold text-bakery-dark leading-none">Little Sweet</h1>
+                    <span class="text-[10px] sm:text-xs font-bold text-bakery-accent tracking-widest uppercase mt-1">Bakery & Coffee</span>
+                </div>
             </div>
             
             <div class="flex items-center gap-3">
@@ -81,11 +83,14 @@
                         <input type="text" id="searchInput" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="Tìm tên bánh, đồ uống...">
                     </div>
                     
-                    <div class="flex bg-white rounded-lg shadow-sm p-1 border border-gray-200 overflow-x-auto whitespace-nowrap">
-                        <button class="filter-btn active px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-bakery-accent text-white" data-filter="Bánh ngọt">Bánh ngọt</button>
-                        <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Đồ uống">Đồ uống</button>
-                        <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Đồ ăn vặt">Đồ ăn vặt</button>
+                    <div class="flex bg-white rounded-lg shadow-sm p-1 border border-gray-200 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                        <button class="filter-btn active px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-bakery-accent text-white" data-filter="Bánh mỳ ngọt">Bánh mỳ ngọt</button>
+                        <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Bánh mỳ tươi">Bánh mỳ tươi</button>
+                        <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Bánh âu">Bánh âu</button>
+                        <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Bánh lạnh">Bánh lạnh</button>
                         <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Bánh sinh nhật">Bánh sinh nhật</button>
+                        <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Bánh qui">Bánh qui</button>
+                        <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Đồ uống">Đồ uống</button>
                     </div>
                 </div>
             </div>
@@ -117,10 +122,13 @@
                         <div>
                             <label for="productCategory" class="block text-sm font-semibold mb-1">Danh mục *</label>
                             <select id="productCategory" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition bg-white">
-                                <option value="Bánh ngọt">🍰 Bánh ngọt</option>
-                                <option value="Đồ uống">🥤 Đồ uống</option>
-                                <option value="Đồ ăn vặt">🍟 Đồ ăn vặt</option>
+                                <option value="Bánh mỳ ngọt">🥐 Bánh mỳ ngọt</option>
+                                <option value="Bánh mỳ tươi">🥖 Bánh mỳ tươi</option>
+                                <option value="Bánh âu">🧁 Bánh âu</option>
+                                <option value="Bánh lạnh">🍰 Bánh lạnh</option>
                                 <option value="Bánh sinh nhật">🎂 Bánh sinh nhật</option>
+                                <option value="Bánh qui">🍪 Bánh qui</option>
+                                <option value="Đồ uống">🥤 Đồ uống</option>
                             </select>
                         </div>
 
@@ -140,7 +148,7 @@
                                             <input id="productImage" name="productImage" type="file" accept="image/*" class="sr-only">
                                         </label>
                                     </div>
-                                    <p class="text-xs text-gray-500">Hệ thống sẽ tự động nén ảnh nhẹ đi</p>
+                                    <p class="text-xs text-gray-500 mt-1" id="imageSizeInfo">Hệ thống tự động nén siêu nhẹ</p>
                                 </div>
                                 <div id="imagePreviewContainer" class="hidden absolute inset-0 bg-white rounded-lg overflow-hidden flex items-center justify-center group">
                                     <img id="imagePreview" src="" alt="Preview" class="h-full w-full object-cover">
@@ -205,6 +213,21 @@
         </div>
     </div>
 
+    <!-- Modal Xác nhận Xóa -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 overflow-hidden p-6 text-center">
+            <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Xóa sản phẩm?</h3>
+            <p class="text-sm text-gray-600 mb-6">Bạn có chắc chắn muốn xóa sản phẩm này khỏi menu không? Hành động này không thể hoàn tác.</p>
+            <div class="flex gap-3">
+                <button id="cancelDeleteBtn" class="flex-1 py-2.5 rounded-lg border border-gray-300 font-medium text-gray-700 hover:bg-gray-50">Hủy</button>
+                <button id="confirmDeleteBtn" class="flex-1 py-2.5 rounded-lg bg-red-500 text-white font-medium hover:bg-red-600">Xóa Ngay</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Khu vực hiển thị thông báo -->
     <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -218,15 +241,8 @@
         // 🔑 DÁN CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY (nhớ dùng 'let' nhé!)
         // =========================================================================
         let firebaseConfig = {
-  apiKey: "AIzaSyB2B25nLv2ejGVv2SlKRL5jzZQeUB1en1c",
-  authDomain: "tiem-banh-nha-miu.firebaseapp.com",
-  projectId: "tiem-banh-nha-miu",
-  storageBucket: "tiem-banh-nha-miu.firebasestorage.app",
-  messagingSenderId: "461102352819",
-  appId: "1:461102352819:web:0a719b00f3a4676106a3c6",
-  measurementId: "G-63WG4CD25G"
-};
-
+            // Dán thông tin Firebase của bạn thay vào đây
+        };
 
         // --- CẤU HÌNH NỘI BỘ (KHÔNG CẦN SỬA) ---
         let appId = 'bakery-menu-app';
@@ -252,11 +268,12 @@
         let products = [];
         let currentUser = null;
         let isAdmin = false; 
-        let currentFilter = 'Bánh ngọt';
+        let currentFilter = 'Bánh mỳ ngọt';
         let searchQuery = '';
         let currentImageBase64 = null;
         let isUploading = false;
         let editingProductId = null; 
+        let productToDeleteId = null;
 
         // Mật khẩu Admin
         const ADMIN_PASSCODE = 'hienyeuhai99';
@@ -276,15 +293,22 @@
         const formColumn = document.getElementById('formColumn');
         const listColumn = document.getElementById('listColumn');
         const authBtn = document.getElementById('authBtn');
+        
         const loginModal = document.getElementById('loginModal');
         const adminPassword = document.getElementById('adminPassword');
         const closeLoginModalBtn = document.getElementById('closeLoginModalBtn');
         const confirmLoginBtn = document.getElementById('confirmLoginBtn');
+
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
         const imageInput = document.getElementById('productImage');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
         const imagePreviewContainer = document.getElementById('imagePreviewContainer');
         const imagePreview = document.getElementById('imagePreview');
         const removeImageBtn = document.getElementById('removeImageBtn');
+        const imageSizeInfo = document.getElementById('imageSizeInfo');
 
         // --- TIỆN ÍCH ---
         const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -352,10 +376,16 @@
 
                 filteredProducts.forEach(product => {
                     let icon, badgeBg;
-                    if (product.category === 'Bánh ngọt') { icon = 'fa-cake-candles'; badgeBg = 'bg-pink-100 text-pink-700'; }
-                    else if (product.category === 'Đồ uống') { icon = 'fa-mug-hot'; badgeBg = 'bg-blue-100 text-blue-700'; }
-                    else if (product.category === 'Đồ ăn vặt') { icon = 'fa-cookie-bite'; badgeBg = 'bg-orange-100 text-orange-700'; }
+                    if (product.category === 'Bánh mỳ ngọt') { icon = 'fa-bread-slice'; badgeBg = 'bg-amber-100 text-amber-700'; }
+                    else if (product.category === 'Bánh mỳ tươi') { icon = 'fa-hotdog'; badgeBg = 'bg-orange-100 text-orange-700'; }
+                    else if (product.category === 'Bánh âu') { icon = 'fa-cheese'; badgeBg = 'bg-yellow-100 text-yellow-700'; }
+                    else if (product.category === 'Bánh lạnh') { icon = 'fa-ice-cream'; badgeBg = 'bg-cyan-100 text-cyan-700'; }
                     else if (product.category === 'Bánh sinh nhật') { icon = 'fa-cake-candles'; badgeBg = 'bg-purple-100 text-purple-700'; }
+                    else if (product.category === 'Bánh qui') { icon = 'fa-cookie'; badgeBg = 'bg-pink-100 text-pink-700'; }
+                    else if (product.category === 'Đồ uống') { icon = 'fa-mug-hot'; badgeBg = 'bg-blue-100 text-blue-700'; }
+                    // Dự phòng cho dữ liệu cũ (nếu có)
+                    else if (product.category === 'Bánh ngọt') { icon = 'fa-cake-candles'; badgeBg = 'bg-pink-100 text-pink-700'; }
+                    else if (product.category === 'Đồ ăn vặt') { icon = 'fa-cookie-bite'; badgeBg = 'bg-orange-100 text-orange-700'; }
                     else { icon = 'fa-star'; badgeBg = 'bg-gray-100 text-gray-700'; }
 
                     const card = document.createElement('div');
@@ -401,11 +431,9 @@
 
                 if (isAdmin) {
                     document.querySelectorAll('.delete-product-btn').forEach(btn => {
-                        btn.addEventListener('click', async (e) => {
-                            const id = e.currentTarget.getAttribute('data-id');
-                            if(confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
-                                await deleteProductFromDB(id);
-                            }
+                        btn.addEventListener('click', (e) => {
+                            productToDeleteId = e.currentTarget.getAttribute('data-id');
+                            deleteModal.classList.remove('hidden');
                         });
                     });
                     document.querySelectorAll('.edit-product-btn').forEach(btn => {
@@ -470,8 +498,17 @@
         }
         initAuth();
 
-        const deleteProductFromDB = async (docId) => {
-            if (!currentUser || !isAdmin) return;
+        // XỬ LÝ XÓA SẢN PHẨM (Dùng custom modal)
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+            productToDeleteId = null;
+        });
+
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!currentUser || !isAdmin || !productToDeleteId) return;
+            const docId = productToDeleteId;
+            deleteModal.classList.add('hidden');
+            
             try {
                 const btn = document.querySelector(`button.delete-product-btn[data-id="${docId}"]`);
                 if(btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
@@ -492,7 +529,7 @@
                 console.error("Lỗi xóa:", error);
                 showToast('Không thể xóa sản phẩm', 'error');
             }
-        };
+        });
 
         const resetForm = () => {
             form.reset();
@@ -503,6 +540,8 @@
             submitText.innerText = 'Lưu Lên Cloud';
             cancelEditBtn.classList.add('hidden');
             cancelEditBtn.classList.remove('flex');
+            imageSizeInfo.innerText = "Hệ thống tự động nén siêu nhẹ";
+            imageSizeInfo.classList.remove('text-green-600', 'font-bold');
         };
 
         const handleEditClick = (id) => {
@@ -589,7 +628,7 @@
                 resetForm(); 
             } catch (error) {
                 console.error("Lỗi lưu dữ liệu:", error);
-                showToast('Lỗi khi lưu sản phẩm. Bức ảnh có thể vẫn còn quá nặng', 'error');
+                showToast('Lỗi khi lưu sản phẩm. Vui lòng thử lại', 'error');
                 submitIcon.className = editingProductId ? 'fa-solid fa-floppy-disk' : 'fa-solid fa-cloud-arrow-up';
                 submitText.innerText = editingProductId ? 'Cập Nhật' : 'Lưu Lên Cloud';
             } finally {
@@ -634,7 +673,7 @@
         confirmLoginBtn.addEventListener('click', handleLoginSubmit);
         adminPassword.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLoginSubmit(); });
 
-        // --- MÃ NÉN ẢNH (GIẢI QUYẾT LỖI TẢI ẢNH NẶNG) ---
+        // --- THUẬT TOÁN NÉN ẢNH (GIẢI QUYẾT LỖI FIREBASE 1MB) ---
         const handleImageUpload = (file) => {
             if (!file) return;
             if (!file.type.startsWith('image/')) {
@@ -649,8 +688,9 @@
                     let width = img.width;
                     let height = img.height;
 
-                    // Giới hạn chiều dài/rộng tối đa là 800px
-                    const MAX_SIZE = 800;
+                    // BƯỚC 1: Giảm độ phân giải xuống tối đa 600px 
+                    // (cực kỳ hiệu quả để ép dung lượng xuống mức vài chục KB)
+                    const MAX_SIZE = 600;
                     if (width > height && width > MAX_SIZE) {
                         height *= MAX_SIZE / width;
                         width = MAX_SIZE;
@@ -663,14 +703,32 @@
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     
-                    // Vẽ nền trắng để tránh bị lỗi đen nền khi nén ảnh PNG trong suốt
+                    // Vẽ nền trắng để tránh bị lỗi hiển thị nền đen khi nén ảnh PNG trong suốt thành JPEG
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, width, height);
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Chuyển ảnh về định dạng JPEG và nén với chất lượng 70% (cực kỳ nhẹ, thường chỉ dưới 100KB)
-                    currentImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    // BƯỚC 2: Chuyển sang định dạng JPEG và nén chất lượng còn 60%
+                    currentImageBase64 = canvas.toDataURL('image/jpeg', 0.6);
                     
+                    // TÍNH DUNG LƯỢNG THỰC TẾ ĐỂ BẠN KIỂM TRA
+                    const base64Length = currentImageBase64.length - (currentImageBase64.indexOf(',') + 1);
+                    const padding = (currentImageBase64.charAt(currentImageBase64.length - 2) === '=') ? 2 : ((currentImageBase64.charAt(currentImageBase64.length - 1) === '=') ? 1 : 0);
+                    const fileSizeInBytes = (base64Length * 3) / 4 - padding;
+                    const sizeInKb = Math.round(fileSizeInBytes / 1024);
+                    
+                    // In ra màn hình console (F12)
+                    console.log("------------------------");
+                    console.log("Kích thước gốc: " + img.width + "x" + img.height);
+                    console.log("Kích thước sau nén: " + Math.round(width) + "x" + Math.round(height));
+                    console.log("DUNG LƯỢNG SAU KHI NÉN: " + sizeInKb + " KB");
+                    console.log("------------------------");
+
+                    // Hiển thị trực tiếp lên màn hình cho bạn yên tâm
+                    imageSizeInfo.innerText = "Ảnh đã nén siêu nhẹ: ~" + sizeInKb + " KB";
+                    imageSizeInfo.classList.add('text-green-600', 'font-bold');
+
+                    // Hiển thị ảnh
                     imagePreview.src = currentImageBase64;
                     uploadPlaceholder.classList.add('hidden');
                     imagePreviewContainer.classList.remove('hidden');
@@ -688,6 +746,8 @@
             imagePreview.src = '';
             uploadPlaceholder.classList.remove('hidden');
             imagePreviewContainer.classList.add('hidden');
+            imageSizeInfo.innerText = "Hệ thống tự động nén siêu nhẹ";
+            imageSizeInfo.classList.remove('text-green-600', 'font-bold');
         });
 
     </script>
