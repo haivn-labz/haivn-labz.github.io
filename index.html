@@ -572,16 +572,11 @@
 
         cancelEditBtn.addEventListener('click', resetForm);
 
-        // XỬ LÝ SUBMIT FORM
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Chỉ kiểm tra xem đã bật chế độ Admin chưa, không chặn tên miền gắt gao nữa
             if (!isAdmin || isUploading) return;
-
-            // KIỂM TRA LỖI FIREBASE NẾU CÓ
-            if (isCloudMode && !currentUser) {
-                showToast("Lỗi: Firebase đang chặn tên miền này. Vui lòng thêm vào Authorized Domains.", "error");
-                return;
-            }
 
             isUploading = true;
             submitBtn.disabled = true;
