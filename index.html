@@ -483,7 +483,7 @@
                 }
             } catch (error) {
                 console.error("Lỗi Auth:", error);
-                showToast("Lỗi: Bạn chưa bật tính năng 'Đăng nhập vô danh' trên Firebase!", "error");
+                showToast("Lỗi Firebase: Tên miền chưa được cấp quyền!", "error");
                 loadingState.classList.add('hidden');
             }
         };
@@ -580,7 +580,7 @@
 
             // KIỂM TRA LỖI FIREBASE NẾU CÓ
             if (isCloudMode && !currentUser) {
-                showToast("Lỗi kết nối CSDL! Hãy kiểm tra lại cấu hình Firebase (Đã bật Đăng nhập vô danh chưa?).", "error");
+                showToast("Lỗi: Firebase đang chặn tên miền này. Vui lòng thêm vào Authorized Domains.", "error");
                 return;
             }
 
