@@ -58,7 +58,7 @@
             
             <div class="flex items-center gap-3">
                 <button id="authBtn" class="flex items-center gap-2 text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-full transition-colors">
-                    <i class="fa-solid fa-lock"></i> <span>Đăng nhập Admin</span>
+                    <i class="fa-solid fa-lock"></i> <span class="hidden sm:inline">Đăng nhập Admin</span>
                 </button>
             </div>
         </div>
@@ -67,18 +67,46 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         
-        <!-- Search/Filter Section (Không còn chữ Danh sách Menu) -->
+        <!-- Search/Filter Section -->
         <div class="mb-8 flex flex-col md:flex-row justify-end items-start md:items-center gap-4">
             <!-- Thanh tìm kiếm và lọc -->
             <div class="flex flex-col sm:flex-row w-full gap-3">
+                
+                <!-- Thanh tìm kiếm -->
                 <div class="relative w-full sm:w-64">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fa-solid fa-search text-gray-400"></i>
                     </div>
-                    <input type="text" id="searchInput" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="Tìm tên bánh, đồ uống...">
+                    <input type="text" id="searchInput" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition shadow-sm" placeholder="Tìm tên bánh, đồ uống...">
                 </div>
                 
-                <div class="flex bg-white rounded-lg shadow-sm p-1 border border-gray-200 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <!-- Nút Menu Dropdown (CHỈ HIỂN THỊ TRÊN ĐIỆN THOẠI) -->
+                <div class="sm:hidden relative w-full z-20">
+                    <button id="mobileMenuBtn" class="w-full flex items-center justify-between bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 font-medium focus:outline-none shadow-sm transition-all active:scale-[0.98]">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-amber-100 text-bakery-accent w-8 h-8 rounded-md flex items-center justify-center">
+                                <i class="fa-solid fa-bars"></i>
+                            </div>
+                            <span id="mobileCurrentCategory" class="font-bold text-gray-800 text-base">Bánh mì ngọt</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-gray-400 text-sm transition-transform duration-300" id="mobileMenuIcon"></i>
+                    </button>
+                    
+                    <div id="mobileMenuDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden divide-y divide-gray-50 transform origin-top transition-all">
+                        <ul class="py-1 flex flex-col max-h-[60vh] overflow-y-auto">
+                            <li><button class="mobile-filter-btn w-full text-left px-5 py-3.5 text-sm bg-amber-50 text-amber-700 font-bold flex items-center gap-3" data-filter="Bánh mì ngọt"><i class="fa-solid fa-bread-slice w-5"></i> Bánh mì ngọt</button></li>
+                            <li><button class="mobile-filter-btn w-full text-left px-5 py-3.5 text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-3" data-filter="Bánh mì tươi"><i class="fa-solid fa-bread-slice w-5"></i> Bánh mì tươi</button></li>
+                            <li><button class="mobile-filter-btn w-full text-left px-5 py-3.5 text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-3" data-filter="Bánh âu"><i class="fa-solid fa-cake-candles w-5"></i> Bánh âu</button></li>
+                            <li><button class="mobile-filter-btn w-full text-left px-5 py-3.5 text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-3" data-filter="Bánh lạnh"><i class="fa-solid fa-cake-candles w-5"></i> Bánh lạnh</button></li>
+                            <li><button class="mobile-filter-btn w-full text-left px-5 py-3.5 text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-3" data-filter="Bánh sinh nhật"><i class="fa-solid fa-cake-candles w-5"></i> Bánh sinh nhật</button></li>
+                            <li><button class="mobile-filter-btn w-full text-left px-5 py-3.5 text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-3" data-filter="Bánh quy"><i class="fa-solid fa-cookie-bite w-5"></i> Bánh quy</button></li>
+                            <li><button class="mobile-filter-btn w-full text-left px-5 py-3.5 text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-3" data-filter="Đồ uống"><i class="fa-solid fa-mug-hot w-5"></i> Đồ uống</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Menu nằm ngang (CHỈ HIỂN THỊ TRÊN MÁY TÍNH/WEB) -->
+                <div class="hidden sm:flex bg-white rounded-lg shadow-sm p-1 border border-gray-200 overflow-x-auto whitespace-nowrap scrollbar-hide">
                     <button class="filter-btn active px-4 py-1.5 rounded-md text-sm font-medium transition-colors bg-bakery-accent text-white" data-filter="Bánh mì ngọt">Bánh mì ngọt</button>
                     <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Bánh mì tươi">Bánh mì tươi</button>
                     <button class="filter-btn px-4 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors" data-filter="Bánh âu">Bánh âu</button>
@@ -104,19 +132,16 @@
                     
                     <form id="productForm" class="space-y-4">
                         <div>
-                            <!-- Đã bỏ required -->
                             <label for="productNameVi" class="block text-sm font-semibold mb-1">Tên Tiếng Việt</label>
                             <input type="text" id="productNameVi" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: Bánh Croissant bơ tỏi">
                         </div>
 
                         <div>
-                            <!-- Đã bỏ required -->
                             <label for="productNameZh" class="block text-sm font-semibold mb-1">Tên Tiếng Trung</label>
                             <input type="text" id="productNameZh" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: 蒜香牛角包">
                         </div>
 
                         <div>
-                            <!-- Đã bỏ required -->
                             <label for="productCategory" class="block text-sm font-semibold mb-1">Danh mục</label>
                             <select id="productCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition bg-white">
                                 <option value="Bánh mì ngọt">🥐 Bánh mì ngọt</option>
@@ -130,7 +155,6 @@
                         </div>
 
                         <div>
-                            <!-- Đã bỏ required -->
                             <label for="productPrice" class="block text-sm font-semibold mb-1">Giá bán (VNĐ)</label>
                             <input type="number" id="productPrice" min="0" step="1000" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: 35000">
                         </div>
@@ -292,27 +316,35 @@
         const grid = document.getElementById('productGrid');
         const emptyState = document.getElementById('emptyState');
         const loadingState = document.getElementById('loadingState');
-        const filterBtns = document.querySelectorAll('.filter-btn');
         const searchInput = document.getElementById('searchInput');
         const formColumn = document.getElementById('formColumn');
         const listColumn = document.getElementById('listColumn');
         const authBtn = document.getElementById('authBtn');
         
+        // Modal Elements
         const loginModal = document.getElementById('loginModal');
         const adminPassword = document.getElementById('adminPassword');
         const closeLoginModalBtn = document.getElementById('closeLoginModalBtn');
         const confirmLoginBtn = document.getElementById('confirmLoginBtn');
-
         const deleteModal = document.getElementById('deleteModal');
         const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
         const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
+        // Image Elements
         const imageInput = document.getElementById('productImage');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
         const imagePreviewContainer = document.getElementById('imagePreviewContainer');
         const imagePreview = document.getElementById('imagePreview');
         const removeImageBtn = document.getElementById('removeImageBtn');
         const imageSizeInfo = document.getElementById('imageSizeInfo');
+
+        // Filter Elements (Web & Mobile)
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const mobileFilterBtns = document.querySelectorAll('.mobile-filter-btn');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenuDropdown = document.getElementById('mobileMenuDropdown');
+        const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+        const mobileCurrentCategory = document.getElementById('mobileCurrentCategory');
 
         // --- TIỆN ÍCH ---
         const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -334,13 +366,13 @@
         const toggleAdminMode = (status) => {
             isAdmin = status;
             if (isAdmin) {
-                authBtn.innerHTML = '<i class="fa-solid fa-unlock text-bakery-accent"></i> <span class="text-bakery-accent font-bold">Thoát Admin</span>';
+                authBtn.innerHTML = '<i class="fa-solid fa-unlock text-bakery-accent"></i> <span class="hidden sm:inline text-bakery-accent font-bold">Thoát Admin</span>';
                 authBtn.classList.replace('bg-gray-100', 'bg-amber-50');
                 formColumn.classList.remove('hidden');
                 listColumn.className = 'lg:col-span-8 space-y-6 transition-all duration-300';
                 showToast('Đã mở khóa quyền chỉnh sửa!');
             } else {
-                authBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span>Đăng nhập Admin</span>';
+                authBtn.innerHTML = '<i class="fa-solid fa-lock"></i> <span class="hidden sm:inline">Đăng nhập Admin</span>';
                 authBtn.classList.replace('bg-amber-50', 'bg-gray-100');
                 formColumn.classList.add('hidden');
                 listColumn.className = 'lg:col-span-12 space-y-6 transition-all duration-300';
@@ -464,7 +496,6 @@
                 renderProducts();
             }, (error) => {
                 console.error("Lỗi tải dữ liệu:", error);
-                showToast("Lỗi kết nối hoặc Firebase chưa được cài đặt đúng.", "error");
                 loadingState.classList.add('hidden');
             });
         };
@@ -575,7 +606,6 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Chỉ kiểm tra xem đã bật chế độ Admin chưa, không chặn tên miền gắt gao nữa
             if (!isAdmin || isUploading) return;
 
             isUploading = true;
@@ -599,7 +629,7 @@
                         if (index !== -1) {
                             products[index] = { ...products[index], nameVi, nameZh, category, price, image: finalImage };
                             localStorage.setItem('bakery_products_v3', JSON.stringify(products));
-                            showToast('Đã cập nhật sản phẩm! (Chế độ Offline)');
+                            showToast('Đã cập nhật sản phẩm!');
                         }
                     } else {
                         const newProduct = {
@@ -609,7 +639,7 @@
                         };
                         products.unshift(newProduct);
                         localStorage.setItem('bakery_products_v3', JSON.stringify(products));
-                        showToast('Đã thêm sản phẩm! (Chế độ Offline)');
+                        showToast('Đã thêm sản phẩm!');
                     }
                     renderProducts();
                     resetForm();
@@ -639,17 +669,75 @@
             }
         });
 
-        // Xử lý Tìm kiếm và Bộ lọc
+        // ==========================================
+        // XỬ LÝ GIAO DIỆN TÌM KIẾM & BỘ LỌC 
+        // ==========================================
+        
+        // 1. Tìm kiếm bằng chữ
         searchInput.addEventListener('input', (e) => { searchQuery = e.target.value.trim(); renderProducts(); });
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => {
+        
+        // 2. Hàm đồng bộ giao diện bộ lọc (Cả Desktop và Mobile)
+        const updateActiveFilterUI = (filterName) => {
+            // Cập nhật nút Desktop
+            filterBtns.forEach(b => {
+                if (b.getAttribute('data-filter') === filterName) {
+                    b.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                    b.classList.add('bg-bakery-accent', 'text-white');
+                } else {
                     b.classList.remove('bg-bakery-accent', 'text-white');
                     b.classList.add('text-gray-600', 'hover:bg-gray-100');
-                });
-                btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
-                btn.classList.add('bg-bakery-accent', 'text-white');
+                }
+            });
+            
+            // Cập nhật Menu Mobile
+            mobileFilterBtns.forEach(b => {
+                if (b.getAttribute('data-filter') === filterName) {
+                    b.classList.remove('text-gray-600', 'hover:bg-gray-50');
+                    b.classList.add('bg-amber-50', 'text-amber-700', 'font-bold');
+                } else {
+                    b.classList.remove('bg-amber-50', 'text-amber-700', 'font-bold');
+                    b.classList.add('text-gray-600', 'hover:bg-gray-50');
+                }
+            });
+            
+            // Đổi tên nhãn Menu Mobile
+            mobileCurrentCategory.innerText = filterName;
+        };
+
+        // 3. Sự kiện click nút Desktop
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
                 currentFilter = btn.getAttribute('data-filter');
+                updateActiveFilterUI(currentFilter);
+                renderProducts();
+            });
+        });
+
+        // 4. Sự kiện bật/tắt Menu Mobile
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenuDropdown.classList.toggle('hidden');
+            mobileMenuIcon.classList.toggle('rotate-180');
+        });
+
+        // Đóng menu mobile khi click ra ngoài
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuBtn.contains(e.target) && !mobileMenuDropdown.contains(e.target)) {
+                mobileMenuDropdown.classList.add('hidden');
+                mobileMenuIcon.classList.remove('rotate-180');
+            }
+        });
+
+        // 5. Sự kiện chọn mục trong Menu Mobile
+        mobileFilterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentFilter = btn.getAttribute('data-filter');
+                updateActiveFilterUI(currentFilter);
+                
+                // Ẩn menu sau khi chọn
+                mobileMenuDropdown.classList.add('hidden');
+                mobileMenuIcon.classList.remove('rotate-180');
+                
                 renderProducts();
             });
         });
