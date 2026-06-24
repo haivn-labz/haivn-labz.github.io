@@ -80,6 +80,9 @@
                     <input type="text" id="searchInput" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition shadow-sm" placeholder="Tìm tên bánh, đồ uống...">
                 </div>
                 
+                <!-- CHỮ MENU CHÍNH GIỮA (CHỈ HIỂN THỊ TRÊN ĐIỆN THOẠI) -->
+                <h2 class="sm:hidden text-2xl font-bold text-bakery-dark uppercase tracking-widest w-full text-center my-2">Menu</h2>
+
                 <!-- Nút Menu Dropdown (CHỈ HIỂN THỊ TRÊN ĐIỆN THOẠI) -->
                 <div class="sm:hidden relative w-full z-20">
                     <button id="mobileMenuBtn" class="w-full flex items-center justify-between bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-700 font-medium focus:outline-none shadow-sm transition-all active:scale-[0.98]">
@@ -261,6 +264,7 @@
 
         // =========================================================================
         // 🔑 DÁN CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY (nhớ dùng 'let' nhé!)
+        // LƯU Ý: Xóa đoạn có dấu 3 chấm này và copy nguyên văn mã Firebase thật của bạn vào
         // =========================================================================
         let firebaseConfig = {
   apiKey: "AIzaSyB2B25nLv2ejGVv2SlKRL5jzZQeUB1en1c",
@@ -271,6 +275,7 @@
   appId: "1:461102352819:web:0a719b00f3a4676106a3c6",
   measurementId: "G-63WG4CD25G"
 };
+
 
         // --- CẤU HÌNH NỘI BỘ ---
         let appId = 'bakery-menu-app';
