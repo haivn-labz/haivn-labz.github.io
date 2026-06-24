@@ -106,18 +106,18 @@
                     
                     <form id="productForm" class="space-y-4">
                         <div>
-                            <label for="productNameVi" class="block text-sm font-semibold mb-1">Tên Tiếng Việt *</label>
-                            <input type="text" id="productNameVi" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: Bánh Croissant bơ tỏi">
+                            <label for="productNameVi" class="block text-sm font-semibold mb-1">Tên Tiếng Việt</label>
+                            <input type="text" id="productNameVi" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: Bánh Croissant bơ tỏi">
                         </div>
 
                         <div>
-                            <label for="productNameZh" class="block text-sm font-semibold mb-1">Tên Tiếng Trung *</label>
-                            <input type="text" id="productNameZh" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: 蒜香牛角包">
+                            <label for="productNameZh" class="block text-sm font-semibold mb-1">Tên Tiếng Trung</label>
+                            <input type="text" id="productNameZh" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: 蒜香牛角包">
                         </div>
 
                         <div>
-                            <label for="productCategory" class="block text-sm font-semibold mb-1">Danh mục *</label>
-                            <select id="productCategory" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition bg-white">
+                            <label for="productCategory" class="block text-sm font-semibold mb-1">Danh mục</label>
+                            <select id="productCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition bg-white">
                                 <option value="Bánh mì ngọt">🥐 Bánh mì ngọt</option>
                                 <option value="Bánh mì tươi">🥖 Bánh mì tươi</option>
                                 <option value="Bánh âu">🧁 Bánh âu</option>
@@ -129,8 +129,8 @@
                         </div>
 
                         <div>
-                            <label for="productPrice" class="block text-sm font-semibold mb-1">Giá bán (VNĐ) *</label>
-                            <input type="number" id="productPrice" required min="0" step="1000" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: 35000">
+                            <label for="productPrice" class="block text-sm font-semibold mb-1">Giá bán (VNĐ)</label>
+                            <input type="number" id="productPrice" min="0" step="1000" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bakery-accent outline-none transition" placeholder="VD: 35000">
                         </div>
 
                         <div>
@@ -581,9 +581,10 @@
             const nameVi = document.getElementById('productNameVi').value.trim();
             const nameZh = document.getElementById('productNameZh').value.trim();
             const category = document.getElementById('productCategory').value;
-            const price = parseFloat(document.getElementById('productPrice').value);
+            const priceVal = document.getElementById('productPrice').value;
+            const price = priceVal ? parseFloat(priceVal) : 0;
             
-            const defaultImage = `https://placehold.co/600x450/fcd34d/78350f?text=${encodeURIComponent(nameVi)}`;
+            const defaultImage = `https://placehold.co/600x450/fcd34d/78350f?text=${encodeURIComponent(nameVi || 'Misu')}`;
             const finalImage = currentImageBase64 || defaultImage;
 
             try {
